@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pure Weaves – Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Pure Weaves - Login Page CSS
+   Full Secure Login: Mobile OTP + Google Sign-In
+============================================================ */
+:root {
+  --maroon: #7B1A2E;
+  --gold: #C9A84C;
+  --cream: #FDF6EC;
+  --deep: #2A0A12;
+  --soft: #F5E6D3;
+  --text: #3A1A22;
+  --muted: #8A6A70;
+  --white: #FFFFFF;
+  --border: #E8CFA8;
+  --green: #25D366;
+  --red: #C0392B;
+  --shadow: rgba(123,26,46,0.18);
+  --radius: 14px;
+  --transition: 0.22s ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--deep) 0%, var(--maroon) 50%, #A0263C 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background pattern */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C9A84C' fill-opacity='0.06'%3E%3Cpath d='M50 50v-8h-4v8h-8v4h8v8h4v-8h8v-4h-8zm0-42V0h-4v8h-8v4h8v8h4V12h8V8h-8zM8 50v-8H4v8H0v4h4v8h4v-8h8v-4H8zM8 8V0H4v8H0v4h4v8h4V12h8V8H8z'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating decorative elements */
+.deco-circle {
+  position: fixed;
+  border-radius: 50%;
+  background: rgba(201,168,76,0.08);
+  pointer-events: none;
+  z-index: 0;
+}
+.deco-1 { width: 300px; height: 300px; top: -100px; right: -80px; }
+.deco-2 { width: 200px; height: 200px; bottom: -60px; left: -60px; }
+.deco-3 { width: 150px; height: 150px; top: 40%; left: -40px; }
+
+/* ── LOGIN CARD ─────────────────────────────────────────── */
+.login-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── CARD HEADER ─────────────────────────────────────────── */
+.card-header {
+  background: linear-gradient(135deg, var(--deep), var(--maroon));
+  padding: 2rem 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.card-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 20px;
+  background: var(--white);
+  border-radius: 50% 50% 0 0 / 20px 20px 0 0;
+}
+.brand-ornament {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(201,168,76,0.8);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 1px;
+  line-height: 1.1;
+}
+.brand-name span { color: var(--gold); }
+.brand-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  margin-top: 4px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+.gold-line {
+  width: 50px; height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 10px auto 0;
+}
+
+/* ── CARD BODY ─────────────────────────────────────────── */
+.card-body { padding: 1.5rem 2rem 2rem; }
+
+/* ── TABS ────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  background: var(--soft);
+  border-radius: 99px;
+  padding: 4px;
+  margin-bottom: 1.5rem;
+  gap: 4px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 99px;
+  font-size: 13px;
+  font-family: 'Lato', sans-serif;
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 400;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.tab-btn.active {
+  background: var(--white);
+  color: var(--maroon);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ── PANELS ──────────────────────────────────────────────── */
+.panel { display: none; animation: fadeIn 0.25s ease; }
+.panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── FORM ELEMENTS ───────────────────────────────────────── */
+.form-group { margin-bottom: 1rem; }
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 5px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 16px;
+  pointer-events: none;
+  z-index: 1;
+}
+.form-input {
+  width: 100%;
+  padding: 11px 14px 11px 38px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--cream);
+  font-family: 'Lato', sans-serif;
+  transition: var(--transition);
+  outline: none;
+}
+.form-input:focus {
+  border-color: var(--maroon);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(123,26,46,0.08);
+}
+.form-input.error { border-color: var(--red); }
+.form-input.success { border-color: #27ae60; }
+
+/* Mobile prefix */
+.mobile-prefix {
+  position: absolute;
+  left: 38px;
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 700;
+  pointer-events: none;
+  z-index: 1;
+}
+.form-input.with-prefix { padding-left: 72px; }
+
+/* ── OTP INPUTS ──────────────────────────────────────────── */
+.otp-label {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+.otp-label strong { color: var(--maroon); }
+
+.otp-boxes {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+.otp-box {
+  width: 46px;
+  height: 54px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--maroon);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  background: var(--cream);
+  font-family: 'Lato', sans-serif;
+  transition: var(--transition);
+  outline: none;
+}
+.otp-box:focus {
+  border-color: var(--maroon);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(123,26,46,0.08);
+}
+.otp-box.filled {
+  border-color: var(--gold);
+  background: #FFFDE7;
+}
+
+/* ── TIMER ───────────────────────────────────────────────── */
+.otp-timer {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.otp-timer span { color: var(--maroon); font-weight: 700; }
+.resend-link {
+  color: var(--maroon);
+  cursor: pointer;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.resend-link.disabled { color: var(--muted); pointer-events: none; text-decoration: none; }
+
+/* ── PROGRESS BAR ────────────────────────────────────────── */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+.step-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  background: var(--soft);
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  transition: var(--transition);
+}
+.step-dot.active {
+  background: var(--maroon);
+  color: var(--white);
+  border-color: var(--maroon);
+}
+.step-dot.done {
+  background: #27ae60;
+  color: var(--white);
+  border-color: #27ae60;
+}
+.step-line {
+  height: 1.5px; width: 40px;
+  background: var(--border);
+  transition: var(--transition);
+}
+.step-line.done { background: #27ae60; }
+
+/* ── BUTTONS ─────────────────────────────────────────────── */
+.btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Lato', sans-serif;
+  transition: var(--transition);
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background 0.2s;
+}
+.btn:hover::after { background: rgba(255,255,255,0.1); }
+.btn:active { transform: scale(0.99); }
+
+.btn-maroon {
+  background: linear-gradient(135deg, var(--maroon), #9B2235);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(123,26,46,0.3);
+}
+.btn-maroon:hover { box-shadow: 0 6px 20px rgba(123,26,46,0.4); }
+.btn-maroon:disabled {
+  background: #ccc;
+  color: #999;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.btn-google {
+  background: var(--white);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.btn-google:hover {
+  border-color: #4285F4;
+  box-shadow: 0 4px 15px rgba(66,133,244,0.15);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--maroon);
+  border: 1.5px solid var(--maroon);
+  margin-top: 8px;
+}
+.btn-outline:hover { background: var(--soft); }
+
+/* ── LOADING SPINNER ─────────────────────────────────────── */
+.spinner {
+  width: 18px; height: 18px;
+  border: 2.5px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── MESSAGES ────────────────────────────────────────────── */
+.msg-box {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 1rem;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.4;
+}
+.msg-box.show { display: flex; }
+.msg-error { background: #FDEDEC; color: var(--red); border: 1px solid #F5B7B1; }
+.msg-success { background: #EAFAF1; color: #1E8449; border: 1px solid #A9DFBF; }
+.msg-info { background: #EBF5FB; color: #1A5276; border: 1px solid #AED6F1; }
+
+/* ── DIVIDER ─────────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 1.25rem 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── TERMS ───────────────────────────────────────────────── */
+.terms {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 1rem;
+  line-height: 1.6;
+}
+.terms a {
+  color: var(--maroon);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ── SECURITY BADGES ─────────────────────────────────────── */
+.security-strip {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 2rem;
+  background: var(--soft);
+  border-top: 1px solid var(--border);
+}
+.sec-badge {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── SUCCESS SCREEN ──────────────────────────────────────── */
+.success-screen {
+  text-align: center;
+  padding: 1rem 0;
+  display: none;
+}
+.success-screen.show { display: block; }
+.success-icon {
+  font-size: 56px;
+  margin-bottom: 1rem;
+  animation: bounce 0.5s ease;
+}
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+.success-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--maroon);
+  margin-bottom: 0.5rem;
+}
+.success-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+.redirect-bar {
+  height: 4px;
+  background: var(--soft);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.redirect-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--maroon), var(--gold));
+  border-radius: 99px;
+  width: 0%;
+  transition: width 3s linear;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .login-card { border-radius: 12px; }
+  .card-body { padding: 1.25rem 1.5rem 1.5rem; }
+  .card-header { padding: 1.5rem 1.5rem 1.25rem; }
+  .otp-box { width: 40px; height: 48px; font-size: 20px; }
+  .otp-boxes { gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background decorations -->
+<div class="deco-circle deco-1"></div>
+<div class="deco-circle deco-2"></div>
+<div class="deco-circle deco-3"></div>
+
+<div class="login-card">
+
+  <!-- ── HEADER ──────────────────────────────────────────── -->
+  <div class="card-header">
+    <div class="brand-ornament">✦ Welcome to ✦</div>
+    <div class="brand-name">Pure <span>Weaves</span></div>
+    <div class="brand-sub">Saree Kuchu & Bunches · Shivamogga, Karnataka</div>
+    <div class="gold-line"></div>
+  </div>
+
+  <!-- ── BODY ────────────────────────────────────────────── -->
+  <div class="card-body">
+
+    <!-- Success Screen (shown after login) -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">Login Successful!</div>
+      <div class="success-sub" id="successMsg">Welcome to Pure Weaves</div>
+      <div class="redirect-bar">
+        <div class="redirect-fill" id="redirectFill"></div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);">Redirecting to catalog...</p>
+    </div>
+
+    <!-- Main Login Content -->
+    <div id="loginContent">
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('mobile', this)" id="tabMobile">
+          📱 Mobile OTP
+        </button>
+        <button class="tab-btn" onclick="switchTab('google', this)" id="tabGoogle">
+          🔵 Google Login
+        </button>
+      </div>
+
+      <!-- ── MOBILE OTP PANEL ─────────────────────────── -->
+      <div class="panel active" id="panel-mobile">
+
+        <!-- Step 1: Enter Mobile -->
+        <div id="mobile-step1">
+          <!-- Progress Steps -->
+          <div class="progress-steps">
+            <div class="step-dot active" id="step1dot">1</div>
+            <div class="step-line" id="stepLine1"></div>
+            <div class="step-dot" id="step2dot">2</div>
+            <div class="step-line" id="stepLine2"></div>
+            <div class="step-dot" id="step3dot">✓</div>
+          </div>
+
+          <!-- Message Box -->
+          <div class="msg-box msg-error" id="mobileError">
+            <span>⚠️</span><span id="mobileErrorText"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mobile Number</label>
+            <div class="input-wrap">
+              <span class="input-icon">📱</span>
+              <span class="mobile-prefix">+91</span>
+              <input
+                class="form-input with-prefix"
+                type="tel"
+                id="mobileInput"
+                placeholder="Enter 10-digit mobile"
+                maxlength="10"
+                oninput="validateMobile(this)"
+                onkeyup="if(event.key==='Enter') sendOTP()"
+              />
+            </div>
+          </div>
+
+          <button class="btn btn-maroon" id="sendOtpBtn" onclick="sendOTP()">
+            <span id="sendOtpText">Send OTP</span>
+            <div class="spinner" id="sendOtpSpinner"></div>
+          </button>
+        </div>
+
+        <!-- Step 2: Enter OTP -->
+        <div id="mobile-step2" style="display:none;">
+          <!-- Progress Steps -->
+          <div class="progress-steps">
+            <div class="step-dot done">✓</div>
+            <div class="step-line done"></div>
+            <div class="step-dot active">2</div>
+            <div class="step-line" id="stepLine2b"></div>
+            <div class="step-dot" id="step3dotB">✓</div>
+          </div>
+
+          <p class="otp-label">
+            OTP sent to <strong id="displayMobile"></strong><br/>
+            Valid for <strong>5 minutes</strong> only
+          </p>
+
+          <!-- OTP Boxes -->
+          <div class="otp-boxes">
+            <input class="otp-box" id="otp1" maxlength="1" type="tel"
+              oninput="otpInput(this,1)" onkeydown="otpKeydown(event,1)" />
+            <input class="otp-box" id="otp2" maxlength="1" type="tel"
+              oninput="otpInput(this,2)" onkeydown="otpKeydown(event,2)" />
+            <input class="otp-box" id="otp3" maxlength="1" type="tel"
+              oninput="otpInput(this,3)" onkeydown="otpKeydown(event,3)" />
+            <input class="otp-box" id="otp4" maxlength="1" type="tel"
+              oninput="otpInput(this,4)" onkeydown="otpKeydown(event,4)" />
+            <input class="otp-box" id="otp5" maxlength="1" type="tel"
+              oninput="otpInput(this,5)" onkeydown="otpKeydown(event,5)" />
+            <input class="otp-box" id="otp6" maxlength="1" type="tel"
+              oninput="otpInput(this,6)" onkeydown="otpKeydown(event,6)" />
+          </div>
+
+          <!-- Timer -->
+          <div class="otp-timer">
+            <span id="timerDisplay">05:00</span> remaining ·
+            <span class="resend-link disabled" id="resendBtn" onclick="resendOTP()">Resend OTP</span>
+          </div>
+
+          <!-- Error Message -->
+          <div class="msg-box msg-error" id="otpError">
+            <span>❌</span><span id="otpErrorText"></span>
+          </div>
+
+          <button class="btn btn-maroon" id="verifyOtpBtn" onclick="verifyOTP()" disabled>
+            <span id="verifyOtpText">Verify & Login</span>
+            <div class="spinner" id="verifyOtpSpinner"></div>
+          </button>
+
+          <button class="btn btn-outline" onclick="goBackToMobile()">
+            ← Change Number
+          </button>
+        </div>
+      </div>
+
+      <!-- ── GOOGLE LOGIN PANEL ────────────────────────── -->
+      <div class="panel" id="panel-google">
+
+        <div class="msg-box msg-info show" style="margin-bottom:1.25rem;">
+          <span>🔒</span>
+          <span>Sign in securely with your Google account. We only access your name and email — nothing else.</span>
+        </div>
+
+        <div class="msg-box msg-error" id="googleError">
+          <span>⚠️</span><span id="googleErrorText"></span>
+        </div>
+        <div class="msg-box msg-info" id="googleInfo">
+          <span>⏳</span><span id="googleInfoText"></span>
+        </div>
+
+        <button class="btn btn-google" id="googleBtn" onclick="googleLogin()">
+          <!-- Official Google SVG logo -->
+          <svg width="20" height="20" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <div style="margin-top:1rem;background:var(--soft);border-radius:9px;padding:12px 14px;">
+          <p style="font-size:12px;color:var(--muted);line-height:1.7;">
+            ✅ <strong>100% Free</strong> — No charges for you or customers<br/>
+            ✅ <strong>Secure</strong> — Google's own security system<br/>
+            ✅ <strong>Fast</strong> — Login in 2 seconds<br/>
+            ✅ <strong>No password</strong> — Just click and sign in
+          </p>
+        </div>
+      </div>
+
+      <!-- ── DIVIDER + TERMS ───────────────────────────── -->
+      <div class="divider">or</div>
+
+      <p class="terms">
+        By logging in, you agree to our
+        <a onclick="showInfo('privacy')">Privacy Policy</a> &amp;
+        <a onclick="showInfo('terms')">Terms of Use</a>.<br/>
+        Your data is safe and never shared with anyone.
+      </p>
+
+    </div><!-- /loginContent -->
+  </div><!-- /card-body -->
+
+  <!-- Security strip -->
+  <div class="security-strip">
+    <div class="sec-badge">🔒 256-bit SSL</div>
+    <div class="sec-badge">🛡️ OTP Secured</div>
+    <div class="sec-badge">🔐 JWT Auth</div>
+    <div class="sec-badge">✅ GDPR Safe</div>
+  </div>
+
+</div><!-- /login-card -->
+
+<!-- ════════════════════════════════════════════════════════
+     JAVASCRIPT — Complete Login Logic
+════════════════════════════════════════════════════════ -->
+<script>
+// ── CONFIG ────────────────────────────────────────────────
+const CONFIG = {
+  OTP_LENGTH:       6,
+  OTP_EXPIRY_SEC:   300,   // 5 minutes
+  MAX_ATTEMPTS:     5,
+  REDIRECT_URL:     'index.html',  // After login, go here
+  WA_NUMBER:        '918123981877',
+  SHOP_NAME:        'Pure Weaves',
+  DEMO_MODE:        true   // Set false when backend is ready
+};
+
+// ── STATE ─────────────────────────────────────────────────
+let STATE = {
+  mobile:        '',
+  generatedOTP:  '',
+  otpExpiry:     null,
+  timerInterval: null,
+  loginAttempts: 0,
+  currentOtpLen: 0
+};
+
+// ── TAB SWITCHER ─────────────────────────────────────────
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+  clearMessages();
+}
+
+// ── MOBILE VALIDATION ────────────────────────────────────
+function validateMobile(input) {
+  input.value = input.value.replace(/\D/g, '');
+  if (input.value.length === 10) {
+    input.classList.remove('error');
+    input.classList.add('success');
+  } else {
+    input.classList.remove('success');
+  }
+}
+
+// ── SEND OTP ──────────────────────────────────────────────
+function sendOTP() {
+  const mobile = document.getElementById('mobileInput').value.trim();
+
+  // Validate
+  if (!mobile || mobile.length !== 10) {
+    showError('mobileError', 'mobileErrorText', 'Please enter a valid 10-digit mobile number');
+    document.getElementById('mobileInput').classList.add('error');
+    return;
+  }
+  if (!/^[6-9]\d{9}$/.test(mobile)) {
+    showError('mobileError', 'mobileErrorText', 'Mobile number must start with 6, 7, 8 or 9');
+    return;
+  }
+
+  // Check attempt limit
+  if (STATE.loginAttempts >= CONFIG.MAX_ATTEMPTS) {
+    showError('mobileError', 'mobileErrorText', 'Too many attempts. Please try again after 30 minutes.');
+    return;
+  }
+
+  // Show loading
+  setLoading('sendOtpBtn', 'sendOtpText', 'sendOtpSpinner', true, 'Sending...');
+
+  // Generate OTP (in production, this happens on backend)
+  STATE.mobile = mobile;
+  STATE.generatedOTP = generateOTP();
+  STATE.otpExpiry = Date.now() + (CONFIG.OTP_EXPIRY_SEC * 1000);
+
+  // Simulate API call (replace with real fetch in production)
+  setTimeout(() => {
+    setLoading('sendOtpBtn', 'sendOtpText', 'sendOtpSpinner', false, 'Send OTP');
+
+    // Show OTP step
+    document.getElementById('mobile-step1').style.display = 'none';
+    document.getElementById('mobile-step2').style.display = 'block';
+    document.getElementById('displayMobile').textContent = '+91 ' + mobile;
+
+    // Start timer
+    startTimer();
+
+    // Focus first OTP box
+    document.getElementById('otp1').focus();
+
+    // In demo mode, show the OTP (remove in production)
+    if (CONFIG.DEMO_MODE) {
+      console.log('Demo OTP: ' + STATE.generatedOTP);
+      alert('📱 Demo OTP: ' + STATE.generatedOTP + '\n(This alert is for testing only. Remove in production!)');
+    }
+
+    // In production: call your backend to send real SMS
+    // sendSMSViaMSG91(mobile, STATE.generatedOTP);
+
+  }, 1500);
+}
+
+// ── OTP INPUT HANDLING ────────────────────────────────────
+function otpInput(input, boxNum) {
+  input.value = input.value.replace(/\D/g, '');
+  if (input.value) {
+    input.classList.add('filled');
+    if (boxNum < CONFIG.OTP_LENGTH) {
+      document.getElementById('otp' + (boxNum + 1)).focus();
+    }
+  } else {
+    input.classList.remove('filled');
+  }
+
+  // Count filled boxes
+  STATE.currentOtpLen = getEnteredOTP().length;
+
+  // Enable verify button when all 6 boxes filled
+  const allFilled = STATE.currentOtpLen === CONFIG.OTP_LENGTH;
+  document.getElementById('verifyOtpBtn').disabled = !allFilled;
+
+  // Clear error on new input
+  hideMessage('otpError');
+
+  // Auto verify when all 6 entered
+  if (allFilled) {
+    setTimeout(verifyOTP, 300);
+  }
+}
+
+function otpKeydown(event, boxNum) {
+  if (event.key === 'Backspace' && !event.target.value && boxNum > 1) {
+    document.getElementById('otp' + (boxNum - 1)).focus();
+  }
+  if (event.key === 'Enter' && STATE.currentOtpLen === CONFIG.OTP_LENGTH) {
+    verifyOTP();
+  }
+}
+
+function getEnteredOTP() {
+  let otp = '';
+  for (let i = 1; i <= CONFIG.OTP_LENGTH; i++) {
+    otp += document.getElementById('otp' + i).value || '';
+  }
+  return otp;
+}
+
+// ── VERIFY OTP ────────────────────────────────────────────
+function verifyOTP() {
+  const entered = getEnteredOTP();
+
+  if (entered.length !== CONFIG.OTP_LENGTH) {
+    showError('otpError', 'otpErrorText', 'Please enter all 6 digits');
+    return;
+  }
+
+  // Check expiry
+  if (Date.now() > STATE.otpExpiry) {
+    showError('otpError', 'otpErrorText', 'OTP has expired. Please request a new one.');
+    return;
+  }
+
+  // Show loading
+  setLoading('verifyOtpBtn', 'verifyOtpText', 'verifyOtpSpinner', true, 'Verifying...');
+
+  setTimeout(() => {
+    if (entered === STATE.generatedOTP) {
+      // ✅ LOGIN SUCCESS
+      clearTimer();
+      setLoading('verifyOtpBtn', 'verifyOtpText', 'verifyOtpSpinner', false, 'Verify & Login');
+
+      // Save user to localStorage
+      const user = {
+        name: 'Customer ' + STATE.mobile.slice(-4),
+        mobile: STATE.mobile,
+        id: Date.now(),
+        loginType: 'otp',
+        token: generateToken()
+      };
+      saveUser(user);
+
+      // Show success
+      showSuccess('Welcome back! 📱 +91 ' + STATE.mobile);
+
+    } else {
+      // ❌ WRONG OTP
+      STATE.loginAttempts++;
+      setLoading('verifyOtpBtn', 'verifyOtpText', 'verifyOtpSpinner', false, 'Verify & Login');
+
+      const remaining = CONFIG.MAX_ATTEMPTS - STATE.loginAttempts;
+      if (remaining > 0) {
+        showError('otpError', 'otpErrorText', `Wrong OTP! ${remaining} attempt(s) remaining.`);
+      } else {
+        showError('otpError', 'otpErrorText', 'Too many wrong attempts. Please request a new OTP.');
+      }
+
+      // Shake OTP boxes
+      document.querySelectorAll('.otp-box').forEach(b => {
+        b.style.borderColor = 'var(--red)';
+        b.style.background = '#FDEDEC';
+        setTimeout(() => { b.style.borderColor = ''; b.style.background = ''; }, 1500);
+      });
+
+      // Clear OTP boxes
+      setTimeout(() => {
+        for (let i = 1; i <= 6; i++) {
+          document.getElementById('otp' + i).value = '';
+          document.getElementById('otp' + i).classList.remove('filled');
+        }
+        document.getElementById('otp1').focus();
+        STATE.currentOtpLen = 0;
+        document.getElementById('verifyOtpBtn').disabled = true;
+      }, 500);
+    }
+  }, 1200);
+}
+
+// ── RESEND OTP ────────────────────────────────────────────
+function resendOTP() {
+  clearTimer();
+  // Clear OTP boxes
+  for (let i = 1; i <= 6; i++) {
+    document.getElementById('otp' + i).value = '';
+    document.getElementById('otp' + i).classList.remove('filled');
+  }
+  STATE.currentOtpLen = 0;
+  document.getElementById('verifyOtpBtn').disabled = true;
+  hideMessage('otpError');
+
+  // Generate new OTP
+  STATE.generatedOTP = generateOTP();
+  STATE.otpExpiry = Date.now() + (CONFIG.OTP_EXPIRY_SEC * 1000);
+
+  // Restart timer
+  startTimer();
+  document.getElementById('otp1').focus();
+
+  if (CONFIG.DEMO_MODE) {
+    alert('New Demo OTP: ' + STATE.generatedOTP);
+  }
+}
+
+// ── TIMER ─────────────────────────────────────────────────
+function startTimer() {
+  const resendBtn = document.getElementById('resendBtn');
+  resendBtn.classList.add('disabled');
+
+  STATE.timerInterval = setInterval(() => {
+    const remaining = Math.max(0, STATE.otpExpiry - Date.now());
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.floor((remaining % 60000) / 1000);
+    document.getElementById('timerDisplay').textContent =
+      String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
+
+    if (remaining <= 0) {
+      clearTimer();
+      document.getElementById('timerDisplay').textContent = '00:00';
+      resendBtn.classList.remove('disabled');
+      showError('otpError', 'otpErrorText', 'OTP expired. Click Resend OTP.');
+    }
+  }, 1000);
+}
+
+function clearTimer() {
+  if (STATE.timerInterval) {
+    clearInterval(STATE.timerInterval);
+    STATE.timerInterval = null;
+  }
+}
+
+// ── GO BACK ───────────────────────────────────────────────
+function goBackToMobile() {
+  clearTimer();
+  document.getElementById('mobile-step2').style.display = 'none';
+  document.getElementById('mobile-step1').style.display = 'block';
+  for (let i = 1; i <= 6; i++) {
+    document.getElementById('otp' + i).value = '';
+    document.getElementById('otp' + i).classList.remove('filled');
+  }
+  hideMessage('otpError');
+  STATE.currentOtpLen = 0;
+  document.getElementById('verifyOtpBtn').disabled = true;
+}
+
+// ── GOOGLE LOGIN ──────────────────────────────────────────
+function googleLogin() {
+  const btn = document.getElementById('googleBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="display:block;border-top-color:var(--maroon);border-color:rgba(0,0,0,0.15);border-top-color:var(--maroon);"></div> Connecting to Google...';
+
+  showMessage('googleInfo', 'googleInfoText', 'Opening Google sign-in window...');
+
+  // In production: use Google OAuth 2.0
+  // 1. Load Google Identity Services script
+  // 2. Initialize with your Client ID from console.cloud.google.com
+  // 3. Handle the credential response
+
+  // Demo simulation:
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Continue with Google`;
+    hideMessage('googleInfo');
+
+    // Simulate Google user data (in production: comes from Google)
+    const googleUser = {
+      name: 'Google User',
+      email: 'user@gmail.com',
+      id: Date.now(),
+      loginType: 'google',
+      token: generateToken()
+    };
+    saveUser(googleUser);
+    showSuccess('Welcome! Signed in with Google ✅');
+
+  }, 2000);
+}
+
+// ── SUCCESS SCREEN ────────────────────────────────────────
+function showSuccess(msg) {
+  document.getElementById('loginContent').style.display = 'none';
+  const screen = document.getElementById('successScreen');
+  document.getElementById('successMsg').textContent = msg;
+  screen.classList.add('show');
+
+  // Animate progress bar
+  setTimeout(() => {
+    document.getElementById('redirectFill').style.width = '100%';
+  }, 100);
+
+  // Redirect after 3 seconds
+  setTimeout(() => {
+    window.location.href = CONFIG.REDIRECT_URL;
+  }, 3200);
+}
+
+// ── HELPER FUNCTIONS ──────────────────────────────────────
+
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+function generateToken() {
+  // Simple token (use JWT in production)
+  return btoa(Date.now() + ':' + Math.random()).replace(/=/g, '');
+}
+
+function saveUser(user) {
+  try {
+    // Load existing state
+    let state = {};
+    try { state = JSON.parse(localStorage.getItem('pureweaves_state') || '{}'); } catch(e) {}
+    state.user = user;
+    localStorage.setItem('pureweaves_state', JSON.stringify(state));
+  } catch(e) {
+    console.error('Storage error:', e);
+  }
+}
+
+function setLoading(btnId, textId, spinnerId, loading, text) {
+  const btn = document.getElementById(btnId);
+  const txtEl = document.getElementById(textId);
+  const spinner = document.getElementById(spinnerId);
+  btn.disabled = loading;
+  txtEl.textContent = text;
+  spinner.style.display = loading ? 'block' : 'none';
+}
+
+function showError(boxId, textId, msg) {
+  const box = document.getElementById(boxId);
+  document.getElementById(textId).textContent = msg;
+  box.classList.add('show');
+  box.className = box.className.replace('msg-success','').replace('msg-info','');
+  if (!box.className.includes('msg-error')) box.classList.add('msg-error');
+}
+
+function showMessage(boxId, textId, msg) {
+  const box = document.getElementById(boxId);
+  document.getElementById(textId).textContent = msg;
+  box.classList.add('show');
+}
+
+function hideMessage(boxId) {
+  document.getElementById(boxId).classList.remove('show');
+}
+
+function clearMessages() {
+  document.querySelectorAll('.msg-box').forEach(b => b.classList.remove('show'));
+}
+
+function showInfo(type) {
+  const msgs = {
+    privacy: '🔒 Privacy Policy\n\nYour mobile number is only used to verify your identity. We never share your data with anyone. All data is encrypted and stored securely.',
+    terms: '📋 Terms of Use\n\nBy using Pure Weaves, you agree to our terms. All orders are confirmed via WhatsApp. Prices may vary. Contact us for any issues.'
+  };
+  alert(msgs[type] || '');
+}
+
+// ── CHECK IF ALREADY LOGGED IN ────────────────────────────
+function checkExistingLogin() {
+  try {
+    const state = JSON.parse(localStorage.getItem('pureweaves_state') || '{}');
+    if (state.user && state.user.token) {
+      // Already logged in — redirect
+      window.location.href = CONFIG.REDIRECT_URL;
+    }
+  } catch(e) {}
+}
+
+// ── INIT ──────────────────────────────────────────────────
+checkExistingLogin();
+</script>
+</body>
+</html>
